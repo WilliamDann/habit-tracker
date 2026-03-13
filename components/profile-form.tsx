@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { deleteAccount } from "@/actions/account";
 import { useRouter } from "next/navigation";
 import type { Profile } from "@/lib/types";
 
@@ -15,6 +16,8 @@ export function ProfileForm({ profile }: ProfileFormProps) {
   const [bio, setBio] = useState(profile.bio || "");
   const [avatarUrl, setAvatarUrl] = useState(profile.avatar_url || "");
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
@@ -137,6 +140,51 @@ export function ProfileForm({ profile }: ProfileFormProps) {
       >
         {saving ? "Saving..." : "Save"}
       </button>
+
+      <div className="mt-10 border-t border-stone-200 pt-6 dark:border-stone-800">
+        <h2 className="text-sm font-semibold text-red-600 dark:text-red-400">Danger Zone</h2>
+        {!confirmDelete ? (
+          <button
+            type="button"
+            onClick={() => setConfirmDelete(true)}
+            className="mt-3 rounded-md border border-red-300 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950"
+          >
+            Delete Account
+          </button>
+        ) : (
+          <div className="mt-3 space-y-2">
+            <p className="text-sm text-stone-600 dark:text-stone-400">
+              This will permanently delete your account and all your data. This cannot be undone.
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                disabled={deleting}
+                onClick={async () => {
+                  setDeleting(true);
+                  try {
+                    await deleteAccount();
+                  } catch {
+                    setError("Failed to delete account");
+                    setDeleting(false);
+                    setConfirmDelete(false);
+                  }
+                }}
+                className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+              >
+                {deleting ? "Deleting..." : "Yes, delete my account"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(false)}
+                className="rounded-md px-4 py-2 text-sm text-stone-600 hover:text-stone-800 dark:text-stone-400"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </form>
   );
 }

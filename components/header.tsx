@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Check } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 export function Header() {
@@ -17,7 +18,8 @@ export function Header() {
   return (
     <header className="border-b border-stone-200 dark:border-stone-800">
       <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
-        <Link href="/dashboard" className="text-lg font-bold">
+        <Link href="/dashboard" className="flex items-center gap-2 text-lg font-bold">
+          <Check className="h-5 w-5" />
           Habit Tracker
         </Link>
         <nav className="flex items-center gap-4 text-sm">

@@ -116,24 +116,38 @@ export function AddHabitDialog() {
                 </button>
               ))}
             </div>
-            {preset === "custom" && (
-              <div className="flex gap-1">
-                {DAY_LABELS.map((label, i) => (
+            <div className="flex gap-1">
+              {DAY_LABELS.map((label, i) => {
+                const activeDays = preset === "custom" ? customDays : PRESETS[preset];
+                const isActive = activeDays.includes(i);
+                const isCustom = preset === "custom";
+                return (
                   <button
                     key={i}
                     type="button"
-                    onClick={() => toggleDay(i)}
+                    onClick={() => {
+                      if (!isCustom) {
+                        setPreset("custom");
+                        setCustomDays(
+                          isActive
+                            ? activeDays.filter((d) => d !== i)
+                            : [...activeDays, i].sort()
+                        );
+                      } else {
+                        toggleDay(i);
+                      }
+                    }}
                     className={`rounded-md px-2 py-1 text-xs ${
-                      customDays.includes(i)
+                      isActive
                         ? "bg-emerald-600 text-white"
-                        : "bg-stone-100 text-stone-500 dark:bg-stone-800"
+                        : "bg-stone-200/50 text-stone-400 dark:bg-stone-800/50 dark:text-stone-600"
                     }`}
                   >
                     {label}
                   </button>
-                ))}
-              </div>
-            )}
+                );
+              })}
+            </div>
           </div>
 
           <div className="flex justify-end gap-2 pt-2">

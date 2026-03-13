@@ -17,7 +17,7 @@ export function Header() {
 
   return (
     <header className="border-b border-stone-200 dark:border-stone-800">
-      <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-3">
+      <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
         <Link href="/dashboard" className="flex items-center gap-2 text-lg font-bold">
           <Check className="h-5 w-5 text-green-700 dark:text-green-500" strokeWidth={3} />
           Habit Tracker

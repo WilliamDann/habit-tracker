@@ -25,7 +25,7 @@ create policy "Users can update own profile"
 create function handle_new_user()
 returns trigger as $$
 begin
-  insert into profiles (id, username)
+  insert into public.profiles (id, username)
   values (new.id, new.email);
   return new;
 end;
